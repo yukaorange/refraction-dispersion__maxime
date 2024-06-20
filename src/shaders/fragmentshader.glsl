@@ -19,6 +19,7 @@ uniform sampler2D uTexture;
 
 varying vec3 worldNormal;
 varying vec3 eyeVector;
+varying vec3 lightDir;
 
 #include "./utils/sat.glsl"
 #include "./utils/specular.glsl"
@@ -78,7 +79,8 @@ void main() {
 
   color /= float(LOOP);
 
-  float specularLight = specular(uLight, uShininess, uDiffuseness);
+  float specularLight = specular(lightDir, uShininess, uDiffuseness);
+  // float specularLight = specular(uLight, uShininess, uDiffuseness);
 
   color += specularLight;
 

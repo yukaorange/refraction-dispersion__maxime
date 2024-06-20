@@ -37,15 +37,15 @@ const Geometries = () => {
     saturation,
   } = useControls({
     lightX: {
-      value: 1.0,
+      value: -2.0,
       step: 0.1,
     },
     lightY: {
-      value: -1.0,
+      value: 2.0,
       step: 0.1,
     },
     lightZ: {
-      value: 1.0,
+      value: 2.0,
       step: 0.1,
     },
     shininess: {
@@ -159,12 +159,11 @@ const Geometries = () => {
     const { gl, scene, camera, clock } = state
 
     const elaplsedTime = clock.getElapsedTime()
-    const x = Math.sin(elaplsedTime) * 7
-    const z = Math.cos(elaplsedTime) * 7
-
-    camera.position.set(x, 5, z)
+    const y = elaplsedTime
 
     if (mesh.current) {
+      mesh.current.rotation.set(0, y, 0)
+
       const shaderMaterial = mesh.current.material as THREE.ShaderMaterial
 
       shaderMaterial.uniforms.uIorR.value = iorR
@@ -204,31 +203,28 @@ const Geometries = () => {
     gl.setRenderTarget(null)
   })
 
+  const columns = range(-7.5, 7.5, 2.5)
+  const rows = range(-7.5, 7.5, 2.5)
+
   return (
     <>
       <color attach="background" args={['black']} />
 
-      <group ref={backgroundgroup} visible={false}>
-        <mesh position={[-4, -3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-        <mesh position={[4, -3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-        <mesh position={[-5, 3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-        <mesh position={[5, 3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
+      <group ref={backgroundgroup} visible={true}>
+        {columns.map((col, i) =>
+          rows.map((row, j) => (
+            <mesh key={`${col}-${row}`} position={[col, row, -4]}>
+              <icosahedronGeometry args={[0.5, 8]} />
+              <meshStandardMaterial color="white" />
+            </mesh>
+          )),
+        )}
       </group>
 
       <mesh ref={mesh}>
-        <torusGeometry args={[2, 0.2, 30, 30]} />
+        <torusGeometry args={[3, 1, 32, 100]} />
+        {/* <boxGeometry args={[1, 1, 1]} /> */}
+        {/* <sphereGeometry args={[1, 32, 100]} /> */}
         <shaderMaterial
           key={uuidv4()}
           vertexShader={vertexshader}
@@ -244,7 +240,7 @@ export const Experience = (): JSX.Element => {
   return (
     <>
       <Leva collapsed />
-      <Canvas shadows camera={{ position: [0, 0, 7] }} dpr={[1, 2]}>
+      <Canvas shadows camera={{ position: [0, 0, 10] }} dpr={[1, 2]}>
         <OrbitControls />
         <ambientLight intensity={1.0} />
         <Geometries />

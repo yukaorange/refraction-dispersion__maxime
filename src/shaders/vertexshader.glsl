@@ -1,5 +1,7 @@
+uniform vec3 uLight;
 varying vec3 worldNormal;
 varying vec3 eyeVector;
+varying vec3 lightDir;
 
 void main() {
   vec4 worldPosition = modelMatrix * vec4(position, 1.0);
@@ -14,4 +16,7 @@ void main() {
 
   // eyeVector = normalize(worldPosition.xyz - cameraPosition);
   eyeVector = normalize(mvPosition.xyz);
+
+  lightDir = normalize(uLight - worldPosition.xyz);
+  // lightDir = normalize(uLight);
 }
