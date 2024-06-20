@@ -18,6 +18,7 @@ uniform vec3 uLight;
 uniform sampler2D uTexture;
 
 varying vec3 worldNormal;
+varying vec3 worldEyeVector;
 varying vec3 eyeVector;
 varying vec3 lightDir;
 

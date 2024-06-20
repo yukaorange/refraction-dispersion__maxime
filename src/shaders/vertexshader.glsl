@@ -1,6 +1,7 @@
 uniform vec3 uLight;
 varying vec3 worldNormal;
 varying vec3 eyeVector;
+varying vec3 worldEyeVector;
 varying vec3 lightDir;
 
 void main() {
@@ -14,7 +15,8 @@ void main() {
 
   worldNormal = normalize(transformedNormal);
 
-  // eyeVector = normalize(worldPosition.xyz - cameraPosition);
+  worldEyeVector = normalize(worldPosition.xyz - cameraPosition);
+
   eyeVector = normalize(mvPosition.xyz);
 
   lightDir = normalize(uLight - worldPosition.xyz);
